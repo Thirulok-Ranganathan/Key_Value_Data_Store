@@ -48,8 +48,18 @@ class KeyValueStore:
                 return "The key has expired"
             else:
                 return content['value']
+            
+    def delete(self, key):
+        with self.lock:
+            if key in self.data:
+                del self.data[key]
+                self.save_dataStore()
+                return "Key has been deleted Successfully"
+            else:
+                return "key not found in Data Store"
 
-print(KeyValueStore().read('fewqqgfwegw'))
+print(KeyValueStore().delete('fewqqgfwegw'))
+# print(KeyValueStore().read('fewqqgfwegw'))
 # print(time.time())
 # print (KeyValueStore().load_dataStore())
 # KeyValueStore().create("weggvasdvwbghw", {"value": "amazon"}, ttl=22)
