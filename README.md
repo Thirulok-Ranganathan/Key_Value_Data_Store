@@ -43,3 +43,4 @@ example:
 ```python
 kvStore.create("example_key",{"value" : "parameter"}, ttl=20)
 ```
+**Note:** TTL is optional mention only if required.
