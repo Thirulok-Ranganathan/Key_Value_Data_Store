@@ -4,8 +4,8 @@ import json
 import time
 
 class KeyValueStore:
-    def __init__(self):
-        self.file_path = "data/data_store.json"
+    def __init__(self, file_path = "data/data_store.json"):
+        self.file_path = file_path
         self.lock = threading.Lock()
         self.data = {}
         self.load_dataStore()
@@ -19,12 +19,12 @@ class KeyValueStore:
         else:
             return "No keys added in Data Store"
         
-    def save_data_to_dataStore(self):
+    def save_dataStore(self):
         with open(self.file_path, 'w') as write:
             json.dump(self.data, write)
         write.close()
 
-    def add_key_to_dataStore(self, key, value, ttl=None):
+    def create(self, key, value, ttl=None):
         if self.data:
             if key in self.data:
                 return "key already exist in the Data Store"
@@ -35,7 +35,9 @@ class KeyValueStore:
         expiry = time.time() + ttl if ttl else None
 
         self.data[key] = {"value": value, 'expiry': expiry}
-        self.save_data_to_dataStore()
+        self.save_dataStore()
 
-# KeyValueStore().add_key_to_dataStore("weggvasdvwbghw", {"value": "amazon"}, ttl=22)
-# KeyValueStore().add_key_to_dataStore("fewqqgfwegw", {"value": "google"})
+
+print (KeyValueStore().load_dataStore())
+# KeyValueStore().create("weggvasdvwbghw", {"value": "amazon"}, ttl=22)
+# KeyValueStore().create("fewqqgfwegw", {"value": "google"})
