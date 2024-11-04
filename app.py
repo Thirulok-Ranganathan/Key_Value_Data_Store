@@ -4,6 +4,9 @@ import json
 import time
 
 class KeyValueStore:
+
+    MAX_JSON_OBJECT = 16 * 1024
+
     def __init__(self, file_path = "data_store.json"):
         self.file_path = file_path
         self.lock = threading.Lock()
@@ -41,6 +44,10 @@ class KeyValueStore:
             else:
                 if len(key) > 32:
                         return f"Error: Key '{key}' length should not exceed the limit of 32 characters."
+                
+                limit_value = json.dumps(value)
+                if len(limit_value.encode('utf-8')) > self.MAX_JSON_OBJECT:
+                    return f"Error: Value exceeds maximum object size of {self.MAX_JSON_OBJECT} bytes."
                 
                 expiry = time.time() + ttl if ttl else None
 
@@ -95,7 +102,13 @@ class KeyValueStore:
                     errors.append(f"Error: TTL for key '{key}' must be an integer.")
                     continue
 
+                limit_value = json.dumps(value)
+                if len(limit_value.encode('utf-8')) > self.MAX_JSON_OBJECT:
+                    errors.append(f"Error: Value of the key '{key}' exceeds maximum object size of {self.MAX_JSON_OBJECT} bytes.")
+                    continue
+
                 result = self.create(key, value, ttl)
+                
                 if "Error" in result:
                     errors.append(result)
 
