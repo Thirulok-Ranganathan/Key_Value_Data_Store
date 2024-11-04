@@ -58,7 +58,14 @@ class KeyValueStore:
             else:
                 return "key not found in Data Store"
 
-print(KeyValueStore().delete('fewqqgfwegw'))
+    def batch_create(self, keys):
+        for key, value in keys:
+            self.create(key, value)
+        return "key-value pairs added successfully"
+
+
+print(KeyValueStore().batch_create([("erg", {"value": "valve"}),("dhdhergew", {"value": "dome"}),("3sdfdsaf", {"value": "hash"})]))
+# print(KeyValueStore().delete('fewqqgfwegw'))
 # print(KeyValueStore().read('fewqqgfwegw'))
 # print(time.time())
 # print (KeyValueStore().load_dataStore())
