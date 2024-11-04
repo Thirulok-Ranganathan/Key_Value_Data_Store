@@ -3,6 +3,12 @@ import os
 import json
 import time
 
+
+# Use the KeyValueStore() class to use the functionalities of the Create, Read, and Delete (CRD) operations.
+# If you need to add custom path mention it in the class KeyValueStore(file_path) while calling it.
+# For create check the parameters (key, value, ttl) or (key, value).
+# Note: The key should be a string that does not exceed 32 characters, value should be a dictionary(json object) and should not exceed the 16KB limit and ttl should be an integer and optional.
+
 class KeyValueStore:
 
     MAX_JSON_OBJECT = 16 * 1024
@@ -79,7 +85,7 @@ class KeyValueStore:
                 return "key not found in Data Store"
 
     def batch_create(self, keys):
-        if len(keys) > 50:
+        if len(keys) > 50:     # Adding a limit of 50 per batch so that it will be easier to manage errors and improve the efficiency and memory consumption
             return "Error: Batch create exceeds the limit of 50"
 
         errors = []
@@ -108,7 +114,7 @@ class KeyValueStore:
                     continue
 
                 result = self.create(key, value, ttl)
-                
+
                 if "Error" in result:
                     errors.append(result)
 
