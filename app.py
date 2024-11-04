@@ -15,7 +15,7 @@ class KeyValueStore:
 
     def __init__(self, file_path = "data_store.json"):
         self.file_path = file_path
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
         self.data = {}
         self.load_dataStore()
 
@@ -121,3 +121,10 @@ class KeyValueStore:
         if errors:
             return "\n".join(errors)
         return "key-value pairs added successfully"
+    
+if __name__ == "__main__":
+    kv = KeyValueStore()
+    print(kv.create("example_key",{"value_name": "parameter"}))
+    print(kv.read("example_key"))
+    print(kv.delete("example_key"))
+    print(kv.batch_create([("example_key",{"value_name": "parameter"}),("example_key2",{"value_name2": "parameter2"}),("example_key3",{"value_name3": "parameter3"})]))
