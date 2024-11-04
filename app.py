@@ -59,8 +59,14 @@ class KeyValueStore:
                 return "key not found in Data Store"
 
     def batch_create(self, keys):
-        for key, value in keys:
-            self.create(key, value)
+        for object in keys:
+            if len(object) == 3:
+                key, value, ttl = object
+            elif len(object) == 2:
+                key, value, ttl = object[0], object[1], None
+            else:
+                return "Error: Provide a valid format containing (key,value) or (key,value,ttl). Note: the value is of type dictionary."
+            self.create(key, value, ttl)
         return "key-value pairs added successfully"
 
 
