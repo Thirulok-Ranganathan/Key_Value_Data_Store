@@ -27,18 +27,19 @@ This is a simple key-value (KV) data store implemented in Python. It supports Cr
    ```bash
    cd Key_Value_Data_Store
    ```
-3. Open the app.py and edit the code according to your needs
+3. Import the KeyValueStore.py to your code
    ```python
-    if __name__ == "__main__":
-        kv = KeyValueStore()
-        print(kv.create("example_key",{"value_name": "parameter"}))
-        print(kv.read("example_key"))
-        print(kv.delete("example_key"))
-        print(kv.batch_create([("example_key",{"value_name": "parameter"}),("example_key2",{"value_name2": "parameter2"}),("example_key3",{"value_name3": "parameter3"})]))
+   from KVstore import KeyValueStore
    ```
-4. After editing run the code
-   ```bash
-   python3 app.py
+4. Initialise the module
+   ```python
+   kvStore = KeyValueStore() # If you need to change the data store file path --> kvStore = KeyValueStore(file_path)
    ```
-
 **Note:** You could edit the code according to your needs and run it. Also import in another project as module and call the functions to execute the operations.
+
+The KeyValueStore contains operations `create()`, `read()`, `delete()` and `batch_create()` 
+
+example: 
+```python
+kvStore.create("example_key",{"value" : "parameter"}, ttl=20)
+```
