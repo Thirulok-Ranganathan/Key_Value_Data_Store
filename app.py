@@ -37,7 +37,20 @@ class KeyValueStore:
         self.data[key] = {"value": value, 'expiry': expiry}
         self.save_dataStore()
 
+    def read(self, key):
+        with self.lock:
+            content = self.data.get(key)
+            if not content:
+                return "Key not Found in Data Store"
+            elif content['expiry'] and time.time() > content['expiry']:
+                del self.data[key]
+                self.save_dataStore()
+                return "The key has expired"
+            else:
+                return content['value']
 
-print (KeyValueStore().load_dataStore())
+print(KeyValueStore().read('fewqqgfwegw'))
+# print(time.time())
+# print (KeyValueStore().load_dataStore())
 # KeyValueStore().create("weggvasdvwbghw", {"value": "amazon"}, ttl=22)
 # KeyValueStore().create("fewqqgfwegw", {"value": "google"})
