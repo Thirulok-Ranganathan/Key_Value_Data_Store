@@ -36,13 +36,17 @@ class KeyValueStore:
                     print (f"Error loading data store: {e}")
         
     def save_dataStore(self):
-        with self.lock:
-            with self.flock:
-                try:
-                    with open(self.file_path, 'w') as write:
-                        json.dump(self.data, write)
-                except IOError as e:
-                    print(f"Error while saving: {e}")
+            with self.lock:
+                with self.flock:
+                    if os.path.exists(self.file_path):
+                        current_size = os.path.getsize(self.file_path) 
+                        if current_size > 1 * 1024 * 1024 * 1024:
+                            return "Error: Data Store exceeded the file size of 1GB"
+                    try:
+                        with open(self.file_path, 'w') as write:
+                            json.dump(self.data, write)
+                    except IOError as e:
+                        print(f"Error while saving: {e}")
     
     def cleanUp_dataStore(self):
         with self.lock:
