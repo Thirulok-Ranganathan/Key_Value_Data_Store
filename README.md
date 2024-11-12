@@ -10,6 +10,7 @@ This is a simple key-value (KV) data store implemented in Python. It supports Cr
 - **Thread Safety**: Supports concurrent access from multiple threads.
 - **TTL Support**: Automatic expiration of keys after a specified duration.
 - **Batch Operations**: Allows adding multiple key-value pairs in one call.
+- **File Lock**: Allows synchronous access to Data file without corrupting the file and prevents multiple rw access simultaneously.
 
 ## Getting Started
 
@@ -27,15 +28,19 @@ This is a simple key-value (KV) data store implemented in Python. It supports Cr
    ```bash
    cd Key_Value_Data_Store
    ```
-3. Import the KeyValueStore.py to your code
+3. Install required modules
+   ```bash
+   pip install filelock
+   ```
+4. Import the KeyValueStore.py to your code
    ```python
    from KVstore import KeyValueStore
    ```
-4. Initialise the module
+5. Initialise the module
    ```python
    kvStore = KeyValueStore() # If you need to change the data store file path --> kvStore = KeyValueStore(file_path)
    ```
-**Note:** You could edit the code according to your needs and run it. Also import in another project as module and call the functions to execute the operations.
+**Note:** You could edit the code according to your needs and run it. Also import in another project as module and call the functions to execute the operations. The cleanUp_dataStore() is set to run automatically to check and delete the expired keys in the data store.
 
 The KeyValueStore contains operations `create()`, `read()`, `delete()` and `batch_create()` 
 
