@@ -15,11 +15,12 @@ class KeyValueStore:
     MAX_JSON_OBJECT = 16 * 1024
 
     def __init__(self, file_path = "data_store.json"):
-        self.file_path = file_path
+        self.file_path = valid_path(file_path)
         self.lock = threading.RLock()
         self.data = {}
         self.flock = filelock.FileLock(file_path + ".lock")
         self.load_dataStore()
+        self.cleanUp_dataStore()
 
     def load_dataStore(self):
         with self.lock:
@@ -42,6 +43,13 @@ class KeyValueStore:
                         json.dump(self.data, write)
                 except IOError as e:
                     print(f"Error while saving: {e}")
+    
+    def cleanUp_dataStore(self):
+        with self.lock:
+            keys_to_delete = [key for key in self.data if self.data[key]['expiry'] and time.time() > self.data[key]['expiry']]
+            for key in keys_to_delete:
+                del self.data[key]
+            self.save_dataStore()
 
     def create(self, key, value, ttl=None):
         with self.lock:
@@ -55,7 +63,7 @@ class KeyValueStore:
                 elif not isinstance(value, dict):
                     return "Error: Value must be in json format."
                 elif ttl is not None and (not isinstance(ttl, int) or ttl < 0):
-                    return "Error: TTL must be an integer."
+                    return "Error: TTL must be an Positive integer."
                 else:
                     if len(key) > 32:
                             return f"Error: Key '{key}' length should not exceed the limit of 32 characters."
@@ -132,3 +140,10 @@ class KeyValueStore:
             return "\n".join(errors)
         return "key-value pairs added successfully"
     
+def valid_path(file_path):
+    if file_path == "":
+        return "data_store.json"
+    elif not file_path.endswith('.json'):
+        return file_path + ".json"
+    else:
+        return file_path
