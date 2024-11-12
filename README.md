@@ -42,6 +42,12 @@ This is a simple key-value (KV) data store implemented in Python. It supports Cr
    ```
 **Note:** You could edit the code according to your needs and run it. Also import in another project as module and call the functions to execute the operations. The cleanUp_dataStore() is set to run automatically to check and delete the expired keys in the data store.
 
+If you want to periodically or after a method call, clean up the expired keys remove the following line in code.
+```python
+self.cleanUp_dataStore() #Remove this line from code
+```
+You can use `kvStore.cleanUp_dataStore()` in your code to clean up the expired keys in data store.
+
 The KeyValueStore contains operations `create()`, `read()`, `delete()` and `batch_create()` 
 
 example: 
